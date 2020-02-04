@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=MedievalSharp&display=swap');
+
+
+.login-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10%;
+    border: 3px solid white;
+    width: 33%;
+
+
+    .login-title {
+        font-family: 'MedievalSharp', cursive;
+        color: white;
+        font-size: 1em;
+ 
+    }
+
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;    
+
+    .login-input {
+        display: flex;
+        width: 250px;
+        height: 30px;
+        margin: 5px;
+    }
+
+    .login-button {
+        display: flex;
+        justify-content: center;
+        background: purple;
+        width: 150px;
+        height: 30px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: white;
+
+    }
+  } 
+}

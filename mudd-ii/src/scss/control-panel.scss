@@ -1,0 +1,19 @@
+.control-panel {
+    background: gray;
+    width:60vw;
+    height: 75px;
+    display:flex;
+    flex-direction: row;
+    margin-top: 20px;
+    border: 5px solid purple;
+
+    .control-button {
+        width: 14.3%;
+        background: gray;
+        font-family: 'MedievalSharp', cursive;
+        font-size: 2em;
+        border-radius: 5px;
+ 
+    }
+
+}
