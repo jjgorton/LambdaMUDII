@@ -3,10 +3,29 @@ class Graph {
         this.rooms = {};
     }
 
-    add_room(room_id, exits) {
-        this.rooms[room_id] = {};
+    add_room({
+        room_id,
+        exits,
+        title,
+        description,
+        coordinates,
+        elevation,
+        terrain,
+        items
+    }) {
+        this.rooms[room_id] = {
+            room_id: room_id,
+            title: title,
+            description: description,
+            coordinates: coordinates,
+            elevation: elevation,
+            terrain: terrain,
+            items: items
+        };
         exits.forEach(direction => {
-            this.rooms[room_id][direction] = -1;
+            if (!this.rooms[room_id][direction]) {
+                this.rooms[room_id][direction] = -1;
+            }
         });
     }
 
@@ -33,7 +52,7 @@ class Graph {
     }
 
     check_for_unexplored(room_id) {
-        unexplored = [];
+        const unexplored = [];
         for (let door in this.rooms[room_id]) {
             if (this.rooms[room_id][door] > 0) {
                 unexplored.push(door);
@@ -42,3 +61,5 @@ class Graph {
         return unexplored.length > 0 ? unexplored : false;
     }
 }
+
+export default Graph;

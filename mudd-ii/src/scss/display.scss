@@ -1,80 +1,144 @@
 * {
     box-sizing: border-box;
 }
-.gameboard {
-    width: 100vh;
-    height: 70vh;
-    display: flex;
-    flex-wrap: wrap;
-    border: 5px solid purple;
-    margin: 0 auto;
-    justify-content: space-around;
-    margin-top: 50px;
-}
-
-.gridsquare,
-.blank {
-    position: relative; // needed for absolute positioning of children to work
-    width: 5%;
-    height: 5%;
-    // border: 1px solid black;
-    background-color: grey;
-}
-
-.blank {
-    background-image: url('../assets/grassbackground.jpg');
-    z-index: 0;
-}
-
-.room {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 75%;
-    height: 75%;
-    background: white;
-    border: 1px solid blue;
-    // display: flex;
-    display: none;
-}
-
-.south-door {
-    position: absolute;
-    top: 75%;
-    left: 25%;
-    width: 25%;
-    height: 25%;
-    background: skyblue;
-}
-
-.east-door {
-    position: absolute;
-    top: 25%;
-    left: 75%;
-    width: 25%;
-    height: 25%;
-    background: brown;
-}
 
 .display {
     display: flex;
     flex-direction: column;
+    width: 80vw;
+    height: 80vh;
+    border: 5px solid purple;
+    overflow: scroll;
+    margin-top: 10px;
 }
 
-.gridsquare {
-    background-image: url('../assets/stonetile.jpg');
-
-    img {
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-    }
+.gameboard {
+    width: 2000px;
+    height: 2000px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    // overflow: scroll;
 }
+
+.gridsquare,
+.blank {
+    // position: relative; // needed for absolute positioning of children to work
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    background-color: grey;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.top,
+.bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 15%;
+}
+.middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 70%;
+}
+
+.room {
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    width: 70%;
+    height: 100%;
+    background: white;
+    border: 1px solid blue;
+    border-radius: 50%;
+    // display: flex;
+}
+
+.north-door {
+    // position: absolute;
+    // top: 75%;
+    // left: 25%;
+    width: 15%;
+    height: 100%;
+    background: skyblue;
+}
+.north-wall {
+    // position: absolute;
+    // top: 75%;
+    // left: 25%;
+    width: 15%;
+    height: 100%;
+    background: gray;
+}
+.south-door {
+    // position: absolute;
+    // top: 25%;
+    // left: 75%;
+    width: 15%;
+    height: 100%;
+    background: brown;
+}
+.south-wall {
+    // position: absolute;
+    // top: 25%;
+    // left: 75%;
+    width: 15%;
+    height: 100%;
+    background: gray;
+}
+.east-door {
+    // position: absolute;
+    // top: 25%;
+    // left: 75%;
+    width: 15%;
+    height: 15%;
+    background: red;
+}
+.east-wall {
+    // position: absolute;
+    // top: 25%;
+    // left: 75%;
+    width: 15%;
+    height: 15%;
+    background: gray;
+}
+.west-door {
+    // position: absolute;
+    // top: 25%;
+    // left: 75%;
+    width: 15%;
+    height: 15%;
+    background: purple;
+}
+.west-wall {
+    // position: absolute;
+    // top: 25%;
+    // left: 75%;
+    width: 15%;
+    height: 15%;
+    background: gray;
+}
+
+// .gridsquare {
+//     background-image: url('../assets/stonetile.jpg');
+
+//     img {
+//         width: 100%;
+//         height: 100%;
+//         z-index: 0;
+//     }
+// }
 
 .player {
-    // background-color: green;
-    img {
-        z-index: 2;
-        width: 70%;
-    }
+    background-color: green;
+    // img {
+    //     z-index: 2;
+    //     width: 70%;
+    // }
 }

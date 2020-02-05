@@ -1,8 +1,7 @@
 import React from 'react';
 import Room from './Room';
 
-const Display = ({ rooms, playerRoom }) => {
-
+const Display = ({ rooms, curRoomId }) => {
     const roomMap = (rooms, width) => {
         let grid = [];
         for (let i = 0; i < width; i++) {
@@ -13,43 +12,36 @@ const Display = ({ rooms, playerRoom }) => {
             grid.push(row);
         }
 
-        rooms.forEach(room => {
-            // let roomType = null;
-            // if (room.s_to !== null && room.e_to !== null) roomType = room;
-            // if (room.s_to !== null && room.e_to === null) roomType = room;
-            // if (room.s_to === null && room.e_to !== null) roomType = room;
+        for (let i in rooms) {
+            let loc = rooms[i].coordinates
+                .split('(')[1]
+                .split(')')[0]
+                .split(',');
+            const x = parseInt(loc[0]);
+            const y = parseInt(loc[1]);
+            // console.log('x:', x, 'y:', y);
 
-            try {
-                grid[room.y][room.x] = room
-            } catch {
-                grid[room.pos_y][room.pos_x] = room;
-            }
-        });
-        return grid.flat();
+            grid[y][x] = rooms[i];
+        }
+        return grid.reverse().flat();
     };
 
-    console.log('roomMap', roomMap(rooms, 20));
+    // console.log('roomMap', roomMap(rooms, 100));
     console.log('****', rooms);
     return (
         <div className='gameboard'>
-            {roomMap(rooms, 20).map(room => {
-                // if (room.s_to !== null) {
-                //     return (
-                //         <>
-                //             <div className='room'></div>
-                //             <div className='south-door'></div>
-                //         </>
-                //     );
-                // }
-                // return <div className='room'></div>;
-
+            {roomMap(rooms, 100).map((room, i) => {
                 if (room !== null) {
-                    if (room.id == playerRoom) {
-                        return <Room room={room} player={true} />
+                    if (room.room_id == curRoomId) {
+                        return <Room room={room} player={true} />;
                     }
                     return <Room room={room} />;
                 } else {
-                    return <div className="blank"></div>
+                    return (
+                        <div key={i} className='blank'>
+                            {i}
+                        </div>
+                    );
                 }
             })}
         </div>
