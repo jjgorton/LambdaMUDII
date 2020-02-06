@@ -20,11 +20,12 @@ class Graph {
             coordinates: coordinates,
             elevation: elevation,
             terrain: terrain,
-            items: items
+            items: items,
+            exits: {}
         };
         exits.forEach(direction => {
-            if (!this.rooms[room_id][direction]) {
-                this.rooms[room_id][direction] = -1;
+            if (!this.rooms[room_id].exits[direction]) {
+                this.rooms[room_id].exits[direction] = -1;
             }
         });
     }
@@ -47,14 +48,14 @@ class Graph {
     }
 
     add_connection(prev_room, cur_room, direction) {
-        this.rooms[prev_room][direction] = cur_room;
-        this.rooms[cur_room][this.reverse(direction)] = prev_room;
+        this.rooms[prev_room].exits[direction] = cur_room;
+        this.rooms[cur_room].exits[this.reverse(direction)] = prev_room;
     }
 
     check_for_unexplored(room_id) {
         const unexplored = [];
-        for (let door in this.rooms[room_id]) {
-            if (this.rooms[room_id][door] > 0) {
+        for (let door in this.rooms[room_id].exits) {
+            if (this.rooms[room_id].exits[door] < 0) {
                 unexplored.push(door);
             }
         }

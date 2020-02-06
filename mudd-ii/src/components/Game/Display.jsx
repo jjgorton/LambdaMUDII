@@ -27,7 +27,7 @@ const Display = ({ rooms, curRoomId }) => {
     };
 
     // console.log('roomMap', roomMap(rooms, 100));
-    console.log('****', rooms);
+    // console.log('****', rooms);
     return (
         <div className='gameboard'>
             {roomMap(rooms, 100).map((room, i) => {

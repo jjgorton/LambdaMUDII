@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
-const Controls = ({ move, coolDown, rooms, curRoomId }) => {
-    const [count, setCount] = useState();
+const Controls = ({ move, coolDown, rooms, curRoomId, counter }) => {
+    // const [count, setCount] = useState();
 
-    useEffect(() => {
-        console.log('useEffect fired!');
-        let time = coolDown;
-        const waitB = setInterval(() => {
-            if (time > 0) {
-                time -= 1;
-                setCount(time);
-            }
-            if (time <= 0) {
-                time = 0;
-                setCount(time);
-                clearInterval(waitB);
-            }
-        }, 1000);
-    }, [coolDown]);
+    // useEffect(() => {
+    //     console.log('useEffect fired!');
+    //     let time = coolDown;
+    //     const waitB = setInterval(() => {
+    //         if (time > 0) {
+    //             time -= 1;
+    //             setCount(time);
+    //         }
+    //         if (time <= 0) {
+    //             time = 0;
+    //             setCount(time);
+    //             clearInterval(waitB);
+    //         }
+    //     }, 1000);
+    // }, [coolDown]);
 
     return (
         <div className='side'>
@@ -37,7 +37,7 @@ const Controls = ({ move, coolDown, rooms, curRoomId }) => {
                     >
                         W
                     </button>
-                    <div className='spacer'>{count}sec.</div>
+                    <div className='spacer'>{counter}sec.</div>
                     <button
                         className='control-button'
                         onClick={() => move('e')}

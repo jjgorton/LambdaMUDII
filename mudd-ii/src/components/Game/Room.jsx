@@ -10,17 +10,21 @@ const Room = ({ room, player }) => {
             </div> */}
 
             <div className='top'>
-                <div className={room.n ? 'north-door' : 'north-wall'}></div>
+                <div
+                    className={room.exits.n ? 'north-door' : 'north-wall'}
+                ></div>
             </div>
 
             <div className='middle'>
-                <div className={room.w ? 'west-door' : 'west-wall'}></div>
+                <div className={room.exits.w ? 'west-door' : 'west-wall'}></div>
                 <div className={player ? 'room player' : 'room'}></div>
-                <div className={room.e ? 'east-door' : 'east-wall'}></div>
+                <div className={room.exits.e ? 'east-door' : 'east-wall'}></div>
             </div>
 
             <div className='bottom'>
-                <div className={room.s + 2 ? 'south-door' : 'south-wall'}></div>
+                <div
+                    className={room.exits.s + 2 ? 'south-door' : 'south-wall'}
+                ></div>
             </div>
             {/* <img src={stone} /> */}
         </div>
