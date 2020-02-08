@@ -22,7 +22,9 @@ const Room = ({ room, player }) => {
                     <div
                         className={room.exits.w + 2 ? 'west-door' : 'west-wall'}
                     ></div>
-                    <div className={player ? 'room player' : 'room'}></div>
+                    <div className={player ? 'room player' : 'room'}>
+                        {room.room_id}
+                    </div>
                     <div
                         className={room.exits.e + 2 ? 'east-door' : 'east-wall'}
                     ></div>

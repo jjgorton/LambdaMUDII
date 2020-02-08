@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
-    // const [count, setCount] = useState();
+// Object.keys(rooms[curRoomId].exits).map((key, i) => {
+//     return (
+//         <div key={i}>
+//             key
+//             rooms[curRoomId].exits.key
+//     );
+// }
 
-    // useEffect(() => {
-    //     console.log('useEffect fired!');
-    //     let time = coolDown;
-    //     const waitB = setInterval(() => {
-    //         if (time > 0) {
-    //             time -= 1;
-    //             setCount(time);
-    //         }
-    //         if (time <= 0) {
-    //             time = 0;
-    //             setCount(time);
-    //             clearInterval(waitB);
-    //         }
-    //     }, 1000);
-    // }, [coolDown]);
+const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
+    // rooms[curRoomId] && console.log('CURROOM EXITS:', rooms[curRoomId].exits);
 
     return (
         <div className='side'>
@@ -66,7 +58,15 @@ const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
                 {rooms[curRoomId] && (
                     <p>Description: {rooms[curRoomId].description}</p>
                 )}
-                {rooms[curRoomId] && <p>Title: {rooms[curRoomId].title}</p>}
+                {rooms[curRoomId] &&
+                    Object.keys(rooms[curRoomId].exits).map((key, i) => {
+                        return (
+                            <div key={i}>
+                                <p>{key}:</p>
+                                <p>{rooms[curRoomId].exits.key}</p>
+                            </div>
+                        );
+                    })}
             </div>
         </div>
     );

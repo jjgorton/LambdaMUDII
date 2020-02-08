@@ -44,7 +44,7 @@ const Display = ({ rooms, curRoomId, player }) => {
                 } else {
                     return (
                         <div key={i} className='blank'>
-                            {i}
+                            {/* {i} */}
                         </div>
                     );
                 }

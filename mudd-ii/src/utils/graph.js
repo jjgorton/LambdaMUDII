@@ -3,30 +3,29 @@ class Graph {
         this.rooms = {};
     }
 
-    add_room({
-        room_id,
-        exits,
-        title,
-        description,
-        coordinates,
-        elevation,
-        terrain,
-        items
-    }) {
-        this.rooms[room_id] = {
-            room_id: room_id,
-            title: title,
-            description: description,
-            coordinates: coordinates,
-            elevation: elevation,
-            terrain: terrain,
-            items: items,
+    // {
+    //     room_id,
+    //     exits,
+    //     title,
+    //     description,
+    //     coordinates,
+    //     elevation,
+    //     terrain,
+    //     items
+    // }
+    add_room(room) {
+        this.rooms[room.room_id] = {
+            room_id: room.room_id,
+            title: room.title,
+            description: room.description,
+            coordinates: room.coordinates,
+            elevation: room.elevation,
+            terrain: room.terrain,
+            items: room.items,
             exits: {}
         };
-        exits.forEach(direction => {
-            if (!this.rooms[room_id].exits[direction]) {
-                this.rooms[room_id].exits[direction] = -1;
-            }
+        room.exits.forEach(direction => {
+            this.rooms[room.room_id].exits[direction] = -1;
         });
     }
 
