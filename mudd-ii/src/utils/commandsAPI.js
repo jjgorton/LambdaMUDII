@@ -175,3 +175,16 @@ export function proofOfWork(prevProof, diff) {
     }
     return proof;
 }
+
+export async function getBalance() {
+    let data = {};
+    await axiosWithAuth()
+        .get('https://lambda-treasure-hunt.herokuapp.com/api/bc/get_balance/')
+        .then(res => {
+            data = res.data;
+            console.log('Balance', res.data);
+        })
+        .catch(err => console.error(err));
+
+    return data;
+}

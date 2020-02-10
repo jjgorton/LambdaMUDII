@@ -12,7 +12,8 @@ import {
     lastProof,
     validProof,
     proofOfWork,
-    submitProof
+    submitProof,
+    getBalance
 } from '../../utils/commandsAPI';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 
@@ -150,6 +151,11 @@ const Commands = ({ move, coolDown, timer, player, graph, counter }) => {
         }
     };
 
+    const bal = async () => {
+        const data = await getBalance();
+        setMessage(data.messages);
+    };
+
     return (
         <div className='commands'>
             <div>
@@ -170,6 +176,7 @@ const Commands = ({ move, coolDown, timer, player, graph, counter }) => {
                 <button onClick={() => shrine(item)}>Pray</button>
                 <button onClick={() => gotTo(493)}>Goto Mine</button>
                 <button onClick={() => mine()}>Start Mining</button>
+                <button onClick={() => bal()}>Balance</button>
                 <button onClick={() => setCheck(!check)}>Status</button>
             </div>
             <div className='message'>
