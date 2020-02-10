@@ -1,25 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const Auto = ({ move, coolDown, graph, curRoomId, player, counter }) => {
-    // const [roomID, setRoomID] = useState();
-    let roomID = curRoomId;
-
-    useEffect(() => {
-        // setRoomID(curRoomId);
-        console.log('roomID', roomID);
-        console.log('inside EFECT', curRoomId);
-    }, [curRoomId]);
-
-    // const wait = seconds => {
-    //     let makeMS = seconds * 1000;
-    //     return new Promise((res, rej) => setTimeout(res, makeMS));
-    // };
-
+const Auto = ({ move, graph, curRoomId, player, counter }) => {
     const timer = seconds => {
         const start = Date.now();
         let time = start + seconds * 1000;
         let run = true;
         while (run) {
+            console.log(time - Date.now());
             if (time - Date.now() < 0) {
                 run = false;
             }
@@ -27,7 +14,7 @@ const Auto = ({ move, coolDown, graph, curRoomId, player, counter }) => {
         return true;
     };
 
-    const automate = () => {
+    const automate = async () => {
         const traversal_path = [];
         const unexplored = [];
         unexplored.push(player.current_room_id);
@@ -43,11 +30,11 @@ const Auto = ({ move, coolDown, graph, curRoomId, player, counter }) => {
             console.log('direections', direction);
             console.log('Before move', player.get_room_id());
             if (direction && room === player.get_room_id()) {
-                console.log('IF passed!', coolDown);
+                console.log('IF passed!', counter);
                 // await wait(coolDown);
                 timer(counter);
                 console.log('After wait()');
-                move(direction[0]);
+                await move(direction[0]);
                 traversal_path.push(direction[0]);
                 path.push(direction[0]);
                 console.log('AFTER move', player.get_room_id());
@@ -59,7 +46,7 @@ const Auto = ({ move, coolDown, graph, curRoomId, player, counter }) => {
                         let backtrack = graph.reverse(path.pop());
                         // await wait(coolDown);
                         timer(counter);
-                        move(backtrack);
+                        await move(backtrack);
                         traversal_path.push(backtrack);
                     } else {
                         console.log('BREAK');
@@ -83,7 +70,7 @@ const Auto = ({ move, coolDown, graph, curRoomId, player, counter }) => {
     return (
         <div>
             <button onClick={() => automate()}>Automate</button>
-            <div>Automated: rooms visited.</div>
+            <div>Automated:{counter} rooms visited.</div>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import NavBarLogout from '../Nav/NavBarLogout';
 import { axiosWithAuth } from '../../utils/axiosWithAuth';
 import axios from 'axios';
@@ -11,6 +11,7 @@ import Auto from './Auto';
 
 import Controls from './Controls';
 import Display from './Display';
+import Commands from './Commands';
 
 const graph = new Graph();
 const player = new Player();
@@ -25,6 +26,11 @@ const Game = props => {
     const [travel, setTravel] = useState(false);
     const [direct, setDirect] = useState({});
     const [newRoom, setNewRoom] = useState({});
+    const [first, setFirst] = useState(true);
+    const [roomList, setRoomList] = useState({});
+    const [message, setMessage] = useState('');
+
+    let cd = 0;
 
     useEffect(() => {
         axios
@@ -34,7 +40,7 @@ const Game = props => {
                 graph.rooms = res.data;
             })
             .catch(err => console.error(err));
-    }, []);
+    }, [first]);
 
     useEffect(() => {
         if (counter === 0) {
@@ -42,12 +48,17 @@ const Game = props => {
                 .get('https://lambda-treasure-hunt.herokuapp.com/api/adv/init/')
                 .then(res => {
                     console.log('RES.DATA(init):', res.data);
-                    graph.add_room(res.data);
+                    if (!graph.rooms[res.data.room_id]) {
+                        graph.add_room(res.data);
+                    }
                     // setNewRoom(res.data);
                     setCoolDown(res.data.cooldown);
+                    player.coolDown = res.data.cooldown;
+                    cd = res.data.cooldown;
                     setFlip(!flip);
                     setCurRoomId(res.data.room_id);
                     player.update_room(res.data.room_id);
+                    setMessage(res.data.messages);
                 })
                 .catch(err => {
                     console.log(err);
@@ -74,8 +85,9 @@ const Game = props => {
         }, 1000);
     }, [flip]);
 
-    function MoveAPI(direct) {
-        axiosWithAuth()
+    async function MoveAPI(direct) {
+        let data = {};
+        await axiosWithAuth()
             .post(
                 'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/',
                 direct
@@ -85,11 +97,13 @@ const Game = props => {
                 if (res.data.errors.length > 0) {
                     alert(res.data.errors);
                 } else {
-                    setPrevRoom(player.get_room_id());
-                    setNewRoom(res.data);
+                    // setPrevRoom(player.get_room_id());
+                    // setNewRoom(res.data);
+                    data = res.data;
                 }
             })
-            .catch(err => console.error(err));
+            .catch(err => console.error(err.errors));
+        return data;
     }
 
     //check if valid direction
@@ -124,50 +138,57 @@ const Game = props => {
         }
     }
 
-    useEffect(() => {
-        if (newRoom.title) {
-            console.log(newRoom);
-            graph.add_room(newRoom);
-            console.log('prev:', player.prev_room_id, 'cur:', newRoom.room_id);
-            graph.add_connection(
-                player.current_room_id,
-                newRoom.room_id,
-                direct
-            );
-            console.log('124', graph);
-            setCoolDown(newRoom.cooldown);
-            setFlip(!flip);
-            console.log('COOLDOWN', newRoom.cooldown);
-            setCurRoomId(newRoom.room_id);
-            console.log('playerRoom', player.get_room_id());
-            player.update_room(newRoom.room_id);
-            console.log('after playerRoom', player.get_room_id());
-        }
-    }, [newRoom]);
+    // useEffect(() => {
+    //     if (newRoom.title) {
+    //         console.log(newRoom);
+    //         graph.add_room(newRoom);
+    //         console.log('prev:', player.prev_room_id, 'cur:', newRoom.room_id);
+    //         graph.add_connection(
+    //             player.current_room_id,
+    //             newRoom.room_id,
+    //             direct
+    //         );
+    //         console.log('124', graph);
+    //         setCoolDown(newRoom.cooldown);
+    //         setFlip(!flip);
+    //         console.log('COOLDOWN', newRoom.cooldown);
+    //         setCurRoomId(newRoom.room_id);
+    //         console.log('playerRoom', player.get_room_id());
+    //         player.update_room(newRoom.room_id);
+    //         console.log('after playerRoom', player.get_room_id());
+    //     }
+    // }, [newRoom]);
 
-    const move = direction => {
+    const move = async direction => {
         //setup timer for cooldown
         if (counter === 0) {
             const directObj = validMove(direction);
-            if (directObj) MoveAPI(directObj);
-            // graph.add_room(newRoom);
-            // graph.add_connection(
-            //     player.current_room_id,
-            //     newRoom.room_id,
-            //     direction
-            // );
-            // console.log('124', graph);
-            // setCoolDown(newRoom.cooldown);
-            // setFlip(!flip);
-            // console.log('COOLDOWN', newRoom.cooldown);
-            // setCurRoomId(newRoom.room_id);
-            // console.log('playerRoom', player.get_room_id());
-            // player.update_room(newRoom.room_id);
-            // console.log('after playerRoom', player.get_room_id());
-            axios
-                .post('http://localhost:5000/rooms', graph.rooms)
-                .then(res => console.log('saved'))
-                .catch(err => console.error(err));
+            if (directObj) {
+                const data = await MoveAPI(directObj);
+                if (!graph.rooms[data.room_id]) {
+                    graph.add_room(data);
+                }
+                graph.add_connection(
+                    player.current_room_id,
+                    data.room_id,
+                    direction
+                );
+                setCoolDown(data.cooldown);
+                player.coolDown = data.cooldown;
+                cd = data.cooldown;
+                setFlip(!flip);
+                console.log('COOLDOWN', data.cooldown);
+                setCurRoomId(data.room_id);
+                console.log('playerRoom', player.get_room_id());
+                player.update_room(data.room_id);
+                console.log('after playerRoom', player.get_room_id());
+                setMessage(data.messages);
+                await axios
+                    .post('http://localhost:5000/rooms', graph.rooms)
+                    .then(res => console.log('saved'))
+                    .catch(err => console.error(err));
+                return data.cooldown;
+            }
         } else {
             // alert(`Cool Down has ${counter} more seconds to go`);
             console.error(`Cool Down has ${counter} more seconds to go`);
@@ -175,6 +196,94 @@ const Game = props => {
     };
 
     console.log(graph);
+
+    const timer = seconds => {
+        const start = Date.now();
+        let time = start + seconds * 1000;
+        let run = true;
+        while (run) {
+            // console.log(time - Date.now());
+            if (time - Date.now() < 0) {
+                run = false;
+            }
+        }
+        return true;
+    };
+
+    const [running, setRunning] = useState(true);
+    console.log(graph.add_all_unexplored());
+
+    const automate = async () => {
+        const traversal_path = [];
+        const unexplored = graph.add_all_unexplored();
+        // unexplored.push(player.current_room_id);
+        const visited = {};
+        const path = [];
+        let cd = coolDown;
+        let run = true;
+
+        while (unexplored.length > 0 && run) {
+            let room = unexplored[unexplored.length - 1];
+            visited[room] = 'added';
+            console.log(
+                `\nvisited: ${
+                    Object.keys(visited).length
+                } Rooms\n Rooms with unexplored doors:\n ${unexplored}`
+            );
+            setRoomList(visited);
+            let direction = graph.check_for_unexplored(player.get_room_id()); // build graph.bfs and use the returned path for directions
+            console.log('direections', direction);
+            console.log('Before move', player.get_room_id());
+            if (direction) {
+                console.log('IF passed!', cd);
+                // await wait(coolDown);
+                timer(cd);
+                console.log('After wait()');
+                cd = await move(direction[0]);
+                traversal_path.push(direction[0]);
+                path.push(direction[0]);
+                console.log('AFTER move', player.get_room_id());
+                visited[player.get_room_id()] = 'added';
+            } else {
+                console.log('ELSE:', direction, room, player.get_room_id());
+                while (!graph.check_for_unexplored(player.get_room_id())) {
+                    console.log('Else while');
+                    if (path.length > 0) {
+                        console.log('backtracking');
+                        let backtrack = graph.reverse(path.pop());
+                        // await wait(coolDown);
+                        timer(cd);
+                        cd = await move(backtrack);
+                        traversal_path.push(backtrack);
+                    } else {
+                        // if(graph.add_all_unexplored().length > 0) {
+                        //     // graph.bfs
+                        // }
+                        console.log('BREAK');
+                        setRunning(false);
+                        run = false;
+                        break;
+                    }
+                }
+            }
+            if (!graph.check_for_unexplored(room)) {
+                console.log('pop');
+                unexplored.pop();
+            }
+            if (graph.check_for_unexplored(player.get_room_id())) {
+                if (!unexplored.includes(player.get_room_id())) {
+                    console.log('push');
+                    unexplored.push(player.get_room_id());
+                }
+            }
+        }
+        console.log(`DONE!\n
+                    visited: ${Object.keys(visited).length} Rooms\n
+                    traversal path: ${traversal_path}
+        `);
+
+        return Object.keys(visited).length;
+    };
 
     return (
         <>
@@ -186,22 +295,36 @@ const Game = props => {
                     player={player}
                 />
             </div>
-            <Controls
-                move={move}
-                coolDown={coolDown}
-                rooms={graph.rooms}
-                curRoomId={curRoomId}
-                counter={counter}
-                player={player}
-            />
+            <div className='movement'>
+                <button onClick={() => automate()}>Discover</button>
+                <Controls
+                    move={move}
+                    coolDown={coolDown}
+                    rooms={graph.rooms}
+                    curRoomId={curRoomId}
+                    counter={counter}
+                    player={player}
+                    message={message}
+                />
+            </div>
 
-            <Auto
+            {/* <Auto
                 move={move}
-                coolDown={coolDown}
+                coolDown={cd}
                 counter={counter}
                 graph={graph}
                 player={player}
                 curRoomId={curRoomId}
+            /> */}
+            <div></div>
+            <Commands
+                MoveAPI={MoveAPI}
+                validMove={validMove}
+                move={move}
+                coolDown={coolDown}
+                timer={timer}
+                player={player}
+                graph={graph}
             />
         </>
     );

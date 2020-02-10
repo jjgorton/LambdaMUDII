@@ -6,10 +6,6 @@ const Room = ({ room, player }) => {
     if (room.exits) {
         return (
             <div className='gridsquare'>
-                {/* <div className={player ? 'player' : 'room'}>
-                <img src={wizard} />
-            </div> */}
-
                 <div className='top'>
                     <div
                         className={
@@ -22,7 +18,9 @@ const Room = ({ room, player }) => {
                     <div
                         className={room.exits.w + 2 ? 'west-door' : 'west-wall'}
                     ></div>
-                    <div className={player ? 'room player' : 'room'}></div>
+                    <div className={player ? 'room player' : 'room'}>
+                        {room.room_id}
+                    </div>
                     <div
                         className={room.exits.e + 2 ? 'east-door' : 'east-wall'}
                     ></div>
@@ -35,7 +33,6 @@ const Room = ({ room, player }) => {
                         }
                     ></div>
                 </div>
-                {/* <img src={stone} /> */}
             </div>
         );
     } else {

@@ -13,8 +13,8 @@
 }
 
 .gameboard {
-    width: 2000px;
-    height: 2000px;
+    width: 3000px;
+    height: 3000px;
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
@@ -24,10 +24,10 @@
 .gridsquare,
 .blank {
     // position: relative; // needed for absolute positioning of children to work
-    width: 20px;
-    height: 20px;
-    border: 1px solid black;
-    background-color: grey;
+    width: 30px;
+    height: 30px;
+    // border: 1px solid black;
+    background-color: black;
     display: flex;
     flex-wrap: wrap;
 }
@@ -54,8 +54,8 @@
     // left: 0;
     width: 70%;
     height: 100%;
-    background: white;
-    border: 1px solid blue;
+    background: black;
+    border: 2px solid purple;
     border-radius: 50%;
     // display: flex;
 }
@@ -66,7 +66,7 @@
     // left: 25%;
     width: 15%;
     height: 100%;
-    background: skyblue;
+    background: purple;
 }
 .north-wall {
     // position: absolute;
@@ -74,7 +74,7 @@
     // left: 25%;
     width: 15%;
     height: 100%;
-    background: gray;
+    background: black;
 }
 .south-door {
     // position: absolute;
@@ -82,7 +82,7 @@
     // left: 75%;
     width: 15%;
     height: 100%;
-    background: brown;
+    background: purple;
 }
 .south-wall {
     // position: absolute;
@@ -90,7 +90,7 @@
     // left: 75%;
     width: 15%;
     height: 100%;
-    background: gray;
+    background: black;
 }
 .east-door {
     // position: absolute;
@@ -98,7 +98,7 @@
     // left: 75%;
     width: 15%;
     height: 15%;
-    background: red;
+    background: purple;
 }
 .east-wall {
     // position: absolute;
@@ -106,7 +106,7 @@
     // left: 75%;
     width: 15%;
     height: 15%;
-    background: gray;
+    background: black;
 }
 .west-door {
     // position: absolute;
@@ -122,7 +122,7 @@
     // left: 75%;
     width: 15%;
     height: 15%;
-    background: gray;
+    background: black;
 }
 
 // .gridsquare {
@@ -137,6 +137,12 @@
 
 .player {
     background-color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    color: rgb(1, 1, 102);
+    font-weight: bold;
     // img {
     //     z-index: 2;
     //     width: 70%;

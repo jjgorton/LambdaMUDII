@@ -1,7 +1,8 @@
 class Player {
     constructor() {
-        this.current_room_id = 0;
-        this.prev_room_id = this.current_room_id;
+        this.current_room_id = null;
+        this.prev_room_id = null;
+        this.coolDown = 0;
     }
 
     update_room(room_id) {

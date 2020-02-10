@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
-const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
-    // const [count, setCount] = useState();
+// Object.keys(rooms[curRoomId].exits).map((key, i) => {
+//     return (
+//         <div key={i}>
+//             key
+//             rooms[curRoomId].exits.key
+//     );
+// }
 
-    // useEffect(() => {
-    //     console.log('useEffect fired!');
-    //     let time = coolDown;
-    //     const waitB = setInterval(() => {
-    //         if (time > 0) {
-    //             time -= 1;
-    //             setCount(time);
-    //         }
-    //         if (time <= 0) {
-    //             time = 0;
-    //             setCount(time);
-    //             clearInterval(waitB);
-    //         }
-    //     }, 1000);
-    // }, [coolDown]);
+const Controls = ({
+    move,
+    coolDown,
+    rooms,
+    curRoomId,
+    counter,
+    player,
+    message
+}) => {
+    // rooms[curRoomId] && console.log('CURROOM EXITS:', rooms[curRoomId].exits);
 
     return (
         <div className='side'>
@@ -53,12 +53,6 @@ const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
                         </button>
                     </div>
                 </div>
-                {/* pickup */}
-                <button className='control-button'>P</button>
-                {/* drop */}
-                <button className='control-button'>D</button>
-                {/* use */}
-                <button className='control-button'>U</button>
             </div>
             <div className='info'>
                 <p>Room ID: {curRoomId}</p>
@@ -66,7 +60,27 @@ const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
                 {rooms[curRoomId] && (
                     <p>Description: {rooms[curRoomId].description}</p>
                 )}
-                {rooms[curRoomId] && <p>Title: {rooms[curRoomId].title}</p>}
+                {rooms[curRoomId] &&
+                    Object.keys(rooms[curRoomId].exits).map((door, i) => {
+                        return (
+                            <div key={i}>
+                                <p>
+                                    {door}: {rooms[curRoomId].exits[door]}
+                                </p>
+                            </div>
+                        );
+                    })}
+                {rooms[curRoomId] &&
+                    rooms[curRoomId].items.map((item, i) => {
+                        return (
+                            <ul key={i}>
+                                <li>{item}</li>
+                            </ul>
+                        );
+                    })}
+            </div>
+            <div className='message'>
+                <p>{message}</p>
             </div>
         </div>
     );
