@@ -59,6 +59,7 @@ const Game = props => {
                     setCurRoomId(res.data.room_id);
                     player.update_room(res.data.room_id);
                     setMessage(res.data.messages);
+                    graph.rooms[res.data.room_id].items = res.data.items;
                 })
                 .catch(err => {
                     console.log(err);
@@ -322,6 +323,7 @@ const Game = props => {
                 validMove={validMove}
                 move={move}
                 coolDown={coolDown}
+                counter={counter}
                 timer={timer}
                 player={player}
                 graph={graph}

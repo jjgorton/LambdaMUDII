@@ -79,20 +79,31 @@ class Graph {
         q.push([start_id]);
         const visited = {};
 
+        // console.log('BFS called');
         while (q.length > 0) {
             let path = q.shift();
+            // console.log('while', path);
             let room = path[path.length - 1];
 
             if (!visited[room]) {
+                // console.log('if', room);
                 if (room === target_id) {
                     //Do the Thing!
+                    console.log('done');
                     return this.path_to_directions(path);
                 }
                 visited[room] = path;
 
                 for (let door in this.rooms[room].exits) {
-                    const new_path = path;
-                    new_path.push(this.rooms[room].exits[door]);
+                    const new_path = [...path];
+                    // console.log(
+                    //     'included',
+                    //     !new_path.includes([this.rooms[room].exits[door]]),
+                    //     this.rooms[room].exits[door]
+                    // );
+                    if (!new_path.includes([this.rooms[room].exits[door]])) {
+                        new_path.push(this.rooms[room].exits[door]);
+                    }
                     q.push(new_path);
                 }
             }
@@ -133,7 +144,7 @@ class Graph {
                 visited[room] = path;
 
                 for (let door in this.rooms[room].exits) {
-                    const new_path = path;
+                    const new_path = [...path];
                     new_path.push(this.rooms[room].exits[door]);
                     q.push(new_path);
                 }
