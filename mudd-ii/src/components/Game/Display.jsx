@@ -1,7 +1,7 @@
 import React from 'react';
 import Room from './Room';
 
-const Display = ({ rooms, curRoomId }) => {
+const Display = ({ rooms, curRoomId, player }) => {
     const roomMap = (rooms, width) => {
         let grid = [];
         for (let i = 0; i < width; i++) {
@@ -13,12 +13,17 @@ const Display = ({ rooms, curRoomId }) => {
         }
 
         for (let i in rooms) {
-            let loc = rooms[i].coordinates
-                .split('(')[1]
-                .split(')')[0]
-                .split(',');
-            const x = parseInt(loc[0]);
-            const y = parseInt(loc[1]);
+            let loc = '';
+            let x = 0;
+            let y = 0;
+            if (rooms[i]) {
+                loc = rooms[i].coordinates
+                    .split('(')[1]
+                    .split(')')[0]
+                    .split(',');
+                x = parseInt(loc[0]);
+                y = parseInt(loc[1]);
+            }
             // console.log('x:', x, 'y:', y);
 
             grid[y][x] = rooms[i];
@@ -32,7 +37,7 @@ const Display = ({ rooms, curRoomId }) => {
         <div className='gameboard'>
             {roomMap(rooms, 100).map((room, i) => {
                 if (room !== null) {
-                    if (room.room_id == curRoomId) {
+                    if (room.room_id == player.get_room_id()) {
                         return <Room room={room} player={true} />;
                     }
                     return <Room room={room} />;

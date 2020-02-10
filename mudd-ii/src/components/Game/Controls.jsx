@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Controls = ({ move, coolDown, rooms, curRoomId, counter }) => {
+const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
     // const [count, setCount] = useState();
 
     // useEffect(() => {
