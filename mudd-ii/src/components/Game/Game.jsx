@@ -11,6 +11,7 @@ import Auto from './Auto';
 
 import Controls from './Controls';
 import Display from './Display';
+import Commands from './Commands';
 
 const graph = new Graph();
 const player = new Player();
@@ -27,6 +28,7 @@ const Game = props => {
     const [newRoom, setNewRoom] = useState({});
     const [first, setFirst] = useState(true);
     const [roomList, setRoomList] = useState({});
+    const [message, setMessage] = useState('');
 
     let cd = 0;
 
@@ -56,6 +58,7 @@ const Game = props => {
                     setFlip(!flip);
                     setCurRoomId(res.data.room_id);
                     player.update_room(res.data.room_id);
+                    setMessage(res.data.messages);
                 })
                 .catch(err => {
                     console.log(err);
@@ -179,6 +182,7 @@ const Game = props => {
                 console.log('playerRoom', player.get_room_id());
                 player.update_room(data.room_id);
                 console.log('after playerRoom', player.get_room_id());
+                setMessage(data.messages);
                 await axios
                     .post('http://localhost:5000/rooms', graph.rooms)
                     .then(res => console.log('saved'))
@@ -207,21 +211,27 @@ const Game = props => {
     };
 
     const [running, setRunning] = useState(true);
+    console.log(graph.add_all_unexplored());
 
     const automate = async () => {
         const traversal_path = [];
-        const unexplored = [];
-        unexplored.push(player.current_room_id);
+        const unexplored = graph.add_all_unexplored();
+        // unexplored.push(player.current_room_id);
         const visited = {};
         const path = [];
         let cd = coolDown;
+        let run = true;
 
-        while (unexplored.length > 0 && running) {
+        while (unexplored.length > 0 && run) {
             let room = unexplored[unexplored.length - 1];
             visited[room] = 'added';
-            console.log(`\nvisited: ${Object.keys(visited).length} Rooms\n`);
+            console.log(
+                `\nvisited: ${
+                    Object.keys(visited).length
+                } Rooms\n Rooms with unexplored doors:\n ${unexplored}`
+            );
             setRoomList(visited);
-            let direction = graph.check_for_unexplored(player.get_room_id());
+            let direction = graph.check_for_unexplored(player.get_room_id()); // build graph.bfs and use the returned path for directions
             console.log('direections', direction);
             console.log('Before move', player.get_room_id());
             if (direction) {
@@ -246,7 +256,12 @@ const Game = props => {
                         cd = await move(backtrack);
                         traversal_path.push(backtrack);
                     } else {
+                        // if(graph.add_all_unexplored().length > 0) {
+                        //     // graph.bfs
+                        // }
                         console.log('BREAK');
+                        setRunning(false);
+                        run = false;
                         break;
                     }
                 }
@@ -280,14 +295,18 @@ const Game = props => {
                     player={player}
                 />
             </div>
-            <Controls
-                move={move}
-                coolDown={coolDown}
-                rooms={graph.rooms}
-                curRoomId={curRoomId}
-                counter={counter}
-                player={player}
-            />
+            <div className='movement'>
+                <button onClick={() => automate()}>Discover</button>
+                <Controls
+                    move={move}
+                    coolDown={coolDown}
+                    rooms={graph.rooms}
+                    curRoomId={curRoomId}
+                    counter={counter}
+                    player={player}
+                    message={message}
+                />
+            </div>
 
             {/* <Auto
                 move={move}
@@ -297,13 +316,16 @@ const Game = props => {
                 player={player}
                 curRoomId={curRoomId}
             /> */}
-            <div>
-                <button onClick={() => automate()}>Automate</button>
-                <button onClick={() => setRunning(false)}>Stop</button>
-                <div>
-                    Automated:{Object.keys(roomList).length} rooms visited.
-                </div>
-            </div>
+            <div></div>
+            <Commands
+                MoveAPI={MoveAPI}
+                validMove={validMove}
+                move={move}
+                coolDown={coolDown}
+                timer={timer}
+                player={player}
+                graph={graph}
+            />
         </>
     );
 };

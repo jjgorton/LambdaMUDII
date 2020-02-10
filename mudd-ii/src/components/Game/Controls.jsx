@@ -8,7 +8,15 @@ import React, { useEffect, useState } from 'react';
 //     );
 // }
 
-const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
+const Controls = ({
+    move,
+    coolDown,
+    rooms,
+    curRoomId,
+    counter,
+    player,
+    message
+}) => {
     // rooms[curRoomId] && console.log('CURROOM EXITS:', rooms[curRoomId].exits);
 
     return (
@@ -45,12 +53,6 @@ const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
                         </button>
                     </div>
                 </div>
-                {/* pickup */}
-                <button className='control-button'>P</button>
-                {/* drop */}
-                <button className='control-button'>D</button>
-                {/* use */}
-                <button className='control-button'>U</button>
             </div>
             <div className='info'>
                 <p>Room ID: {curRoomId}</p>
@@ -59,14 +61,26 @@ const Controls = ({ move, coolDown, rooms, curRoomId, counter, player }) => {
                     <p>Description: {rooms[curRoomId].description}</p>
                 )}
                 {rooms[curRoomId] &&
-                    Object.keys(rooms[curRoomId].exits).map((key, i) => {
+                    Object.keys(rooms[curRoomId].exits).map((door, i) => {
                         return (
                             <div key={i}>
-                                <p>{key}:</p>
-                                <p>{rooms[curRoomId].exits.key}</p>
+                                <p>
+                                    {door}: {rooms[curRoomId].exits[door]}
+                                </p>
                             </div>
                         );
                     })}
+                {rooms[curRoomId] &&
+                    rooms[curRoomId].items.map((item, i) => {
+                        return (
+                            <ul key={i}>
+                                <li>{item}</li>
+                            </ul>
+                        );
+                    })}
+            </div>
+            <div className='message'>
+                <p>{message}</p>
             </div>
         </div>
     );

@@ -6,10 +6,6 @@ const Room = ({ room, player }) => {
     if (room.exits) {
         return (
             <div className='gridsquare'>
-                {/* <div className={player ? 'player' : 'room'}>
-                <img src={wizard} />
-            </div> */}
-
                 <div className='top'>
                     <div
                         className={
@@ -37,7 +33,6 @@ const Room = ({ room, player }) => {
                         }
                     ></div>
                 </div>
-                {/* <img src={stone} /> */}
             </div>
         );
     } else {

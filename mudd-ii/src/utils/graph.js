@@ -60,6 +60,86 @@ class Graph {
         }
         return unexplored.length > 0 ? unexplored : false;
     }
+
+    add_all_unexplored() {
+        const unexplored = [];
+        for (let room in this.rooms) {
+            for (let door in this.rooms[room].exits) {
+                if (this.rooms[room].exits[door] === -1) {
+                    unexplored.push(room);
+                    break;
+                }
+            }
+        }
+        return unexplored;
+    }
+
+    bfs(start_id, target_id) {
+        const q = [];
+        q.push([start_id]);
+        const visited = {};
+
+        while (q.length > 0) {
+            let path = q.shift();
+            let room = path[path.length - 1];
+
+            if (!visited[room]) {
+                if (room === target_id) {
+                    //Do the Thing!
+                    return this.path_to_directions(path);
+                }
+                visited[room] = path;
+
+                for (let door in this.rooms[room].exits) {
+                    const new_path = path;
+                    new_path.push(this.rooms[room].exits[door]);
+                    q.push(new_path);
+                }
+            }
+        }
+    }
+
+    path_to_directions(path_arr) {
+        const directions = [];
+
+        for (let i = 0; i < path_arr.length - 1; i++) {
+            let room = path_arr[i];
+            let next = path_arr[i + 1];
+            let doors = this.rooms[room].exits;
+            for (let door in doors) {
+                if (doors[door] === next) {
+                    directions.push(door);
+                }
+            }
+        }
+        console.log('graph 115 directionsArr', directions);
+        return directions;
+    }
+
+    search_items(cur_room, item) {
+        const q = [];
+        q.push([cur_room]);
+        const visited = {};
+
+        while (q.length > 0) {
+            let path = q.shift();
+            let room = path[path.length - 1];
+
+            if (!visited[room]) {
+                if (this.rooms[room].items.includes(item)) {
+                    //Do the Thing!
+                    return this.path_to_directions(path);
+                }
+                visited[room] = path;
+
+                for (let door in this.rooms[room].exits) {
+                    const new_path = path;
+                    new_path.push(this.rooms[room].exits[door]);
+                    q.push(new_path);
+                }
+            }
+        }
+    }
 }
 
 export default Graph;
