@@ -296,20 +296,21 @@ const Game = props => {
                     player={player}
                 />
             </div>
-            <div className='movement'>
-                <button onClick={() => automate()}>Discover</button>
-                <Controls
-                    move={move}
-                    coolDown={coolDown}
-                    rooms={graph.rooms}
-                    curRoomId={curRoomId}
-                    counter={counter}
-                    player={player}
-                    message={message}
-                />
-            </div>
+            <div className='controls'>
+                <div className='movement'>
+                    <button onClick={() => automate()}>Discover</button>
+                    <Controls
+                        move={move}
+                        coolDown={coolDown}
+                        rooms={graph.rooms}
+                        curRoomId={curRoomId}
+                        counter={counter}
+                        player={player}
+                        message={message}
+                    />
+                </div>
 
-            {/* <Auto
+                {/* <Auto
                 move={move}
                 coolDown={cd}
                 counter={counter}
@@ -317,17 +318,18 @@ const Game = props => {
                 player={player}
                 curRoomId={curRoomId}
             /> */}
-            <div></div>
-            <Commands
-                MoveAPI={MoveAPI}
-                validMove={validMove}
-                move={move}
-                coolDown={coolDown}
-                counter={counter}
-                timer={timer}
-                player={player}
-                graph={graph}
-            />
+                <div></div>
+                <Commands
+                    MoveAPI={MoveAPI}
+                    validMove={validMove}
+                    move={move}
+                    coolDown={coolDown}
+                    counter={counter}
+                    timer={timer}
+                    player={player}
+                    graph={graph}
+                />
+            </div>
         </>
     );
 };
